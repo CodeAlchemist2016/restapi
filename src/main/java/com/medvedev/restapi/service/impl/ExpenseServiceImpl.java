@@ -2,6 +2,7 @@ package com.medvedev.restapi.service.impl;
 
 import com.medvedev.restapi.dto.ExpenseDTO;
 import com.medvedev.restapi.entity.ExpenseEntity;
+import com.medvedev.restapi.exceptions.ResourceNotFoundException;
 import com.medvedev.restapi.repository.ExpenseRepository;
 import com.medvedev.restapi.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,21 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         // Return the list
         return listOfExpenses;
+    }
+
+    /**
+     * It will fetch the single expense details from database
+     * @param expenseId
+     * @return ExpenseDTO
+     */
+
+    @Override
+    public ExpenseDTO getExpenseByExpenseId(String expenseId) {
+        ExpenseEntity expenseEntity = expenseRepository.findByExpenseId(expenseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Expense not found for the expense id " + expenseId));
+
+        log.info("Printing the expense entity details {}", expenseEntity);
+        return mapToExpenseDTO(expenseEntity);
     }
 
     /**

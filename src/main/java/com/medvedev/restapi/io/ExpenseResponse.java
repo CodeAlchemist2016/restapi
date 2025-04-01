@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 public class ExpenseResponse {
-    private String expense_id;
+    private String expenseId;
     private String name;
     private String note;
     private String category;

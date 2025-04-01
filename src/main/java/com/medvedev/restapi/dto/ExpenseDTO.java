@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class ExpenseDTO {
-    private String expense_id;
+    private String expenseId;
     private String name;
     private String note;
     private String category;
