@@ -24,7 +24,7 @@ public class ExpenseEntity {
     private Long id;
 
     @Column(unique = true)
-    private String expense_id;
+    private String expenseId;
     private String name;
     private String note;
     private String category;
