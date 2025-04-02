@@ -6,10 +6,8 @@ import com.medvedev.restapi.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,12 +46,12 @@ public class ExpenseController {
 
     /**
      * It will fetch the single expense from database
-     * @param expenseId
+     * @param expenseId - expenseId
      * @return ExpenseResponse
      */
 
     @GetMapping("/expenses/{expenseId}")
-    public ExpenseResponse getExpenseById(@PathVariable String expenseId) {
+    public ExpenseResponse getExpenseByExpenseId(@PathVariable String expenseId) {
         log.info("API GET /expenses/{} called", expenseId);
         ExpenseDTO expenseDTO = expenseService.getExpenseByExpenseId(expenseId);
         log.info("Printing the expense details {}", expenseDTO);
@@ -61,8 +59,20 @@ public class ExpenseController {
     }
 
     /**
+     * It will delete the expense from database
+     * @param expenseId - expenseId
+     */
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/expenses/{expenseId}")
+    public void deleteExpenseByExpenseId(@PathVariable String expenseId) {
+        log.info("API DELETE /expenses/{} called", expenseId);
+        expenseService.deleteExpenseByExpenseId(expenseId);
+    }
+
+    /**
      * Mapper method for converting expense dto object to expense response
-     * @param expenseDTO
+     * @param expenseDTO - expenseId
      * @return ExpenseResponse
      */
 
