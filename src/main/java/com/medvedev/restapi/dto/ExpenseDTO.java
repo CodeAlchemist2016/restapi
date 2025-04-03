@@ -20,6 +20,6 @@ public class ExpenseDTO {
     private String category;
     private Date date;
     private BigDecimal amount;
-    private Timestamp created_at;
-    private Timestamp updated_at;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 }
