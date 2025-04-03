@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -36,7 +37,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     public List<ExpenseDTO> getAllExpenses() {
         // Call the repository method
         List<ExpenseEntity> list = expenseRepository.findAll();
-        log.info("Printing the data from repository {}", list);
+        log.info("Printing the data from repository {}",
+                list);
 
         // convert the Entity object to DTO object
         List<ExpenseDTO> listOfExpenses = list.stream().map(expenseEntity -> mapToExpenseDTO(expenseEntity)).collect(Collectors.toList());
@@ -55,7 +57,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public ExpenseDTO getExpenseByExpenseId(String expenseId) {
         ExpenseEntity expenseEntity = getExpenseEntity(expenseId);
-        log.info("Printing the expense entity details {}", expenseEntity);
+        log.info("Printing the expense entity details {}",
+                expenseEntity);
         return mapToExpenseDTO(expenseEntity);
     }
 
@@ -67,9 +70,36 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public void deleteExpenseByExpenseId(String expenseId) {
-       ExpenseEntity expenseEntity = getExpenseEntity(expenseId);
-       log.info("Printing the expense entity {}", expenseEntity);
-       expenseRepository.delete(expenseEntity);
+        ExpenseEntity expenseEntity = getExpenseEntity(expenseId);
+        log.info("Printing the expense entity {}",
+                expenseEntity);
+        expenseRepository.delete(expenseEntity);
+    }
+
+    /**
+     * It will save the expense details to the database
+     * @param expenseDTO - expenseDTO
+     * @return ExpenseDTO
+     */
+
+    @Override
+    public ExpenseDTO saveExpenseDetails(ExpenseDTO expenseDTO) {
+        ExpenseEntity newExpenseEntity = mapToExpenseEntity(expenseDTO);
+        newExpenseEntity.setExpenseId(UUID.randomUUID().toString());
+        newExpenseEntity = expenseRepository.save(newExpenseEntity);
+        log.info("Printing the new expense entity details {}", newExpenseEntity);
+        return mapToExpenseDTO(newExpenseEntity);
+    }
+
+    /**
+     * Mapper method to map values from ExpenseDTO to ExpenseEntity
+     * @param expenseDTO = expenseDTO
+     * @return ExpenseEntity
+     */
+
+    private ExpenseEntity mapToExpenseEntity(ExpenseDTO expenseDTO) {
+        return modelMapper.map(expenseDTO,
+                ExpenseEntity.class);
     }
 
     /**
@@ -80,7 +110,8 @@ public class ExpenseServiceImpl implements ExpenseService {
      */
 
     private ExpenseDTO mapToExpenseDTO(ExpenseEntity expenseEntity) {
-        return modelMapper.map(expenseEntity, ExpenseDTO.class);
+        return modelMapper.map(expenseEntity,
+                ExpenseDTO.class);
     }
 
     /**
